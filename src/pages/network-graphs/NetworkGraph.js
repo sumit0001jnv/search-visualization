@@ -1,49 +1,6 @@
-import { useState, Fragment, useLayoutEffect, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import CssBaseline from '@mui/material/CssBaseline';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import Slide from '@mui/material/Slide';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import * as d3 from 'd3';
-
-const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: 0,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
-
-function HideOnScroll(props) {
-    const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
-    const trigger = useScrollTrigger({
-        target: window ? window() : undefined,
-    });
-
-    return (
-        <Slide appear={false} direction="down" in={!trigger}>
-            {children}
-        </Slide>
-    );
-}
-
-HideOnScroll.propTypes = {
-    children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
-
-
 
 export default function NetworkGraph(props) {
 
@@ -65,7 +22,14 @@ export default function NetworkGraph(props) {
 
 
     useEffect(() => {
-        onInitSvg();
+        const width = document.querySelector("#svg-id").parentNode.offsetWidth - (margin.left + margin.right);
+        const height = document.querySelector("#svg-id").parentNode.offsetHeight - (margin.top + margin.bottom);
+        console.log(width, height)
+        setWidth(() => width);
+        setHeight(() => height);
+        setTimeout(() => {
+            onInitSvg();
+        }, 1000);
     }, []);
 
     function onInitSvg() {
@@ -118,19 +82,19 @@ export default function NetworkGraph(props) {
                 // { source: 2, target: 8, type: 'Next -->>' },
                 // { source: 2, target: 9, type: 'Next -->>' },
                 { source: 3, target: 10, type: 'Next -->>' },
-                { source: 3, target: 11, type: 'Next -->>' },
+                { source: 11, target: 3, type: 'Next -->>' },
                 // { source: 8, target: 5, type: 'Go to ->>' },
                 // { source: 8, target: 11, type: 'Go to ->>' },
                 { source: 9, target: 6, type: 'Go to ->>' },
                 { source: 9, target: 7, type: 'Go to ->>' },
                 // { source: 8, target: 9, type: 'Go to ->>' },
-                { source: 9, target: 11, type: 'Go to ->>' },
-                { source: 12, target: 11, type: 'Go to ->>' },
+                { source: 11, target: 9, type: 'Go to ->>' },
+                { source: 11, target: 12, type: 'Go to ->>' },
                 { source: 12, target: 5, type: 'Go to ->>' },
                 { source: 12, target: 14, type: 'Go to ->>' },
                 { source: 12, target: 2, type: 'Go to ->>' },
                 // { source: 12, target: 9, type: 'Go to ->>' },
-                { source: 13, target: 11, type: 'Go to ->>' },
+                { source: 11, target: 13, type: 'Go to ->>' },
                 // { source: 2, target: 13, type: 'Go to ->>' },
                 { source: 13, target: 4, type: 'This way>>' },
                 // { source: 13, target: 5, type: 'This way>>' },
@@ -257,21 +221,21 @@ export default function NetworkGraph(props) {
         //   }
 
         //drawing the legend
-        const legend_g = svg.selectAll(".legend")
-            .data(colorScale.domain())
-            .enter().append("g")
-            .attr("transform", (d, i) => `translate(${width},${i * 20})`);
+        // const legend_g = svg.selectAll(".legend")
+        //     .data(colorScale.domain())
+        //     .enter().append("g")
+        //     .attr("transform", (d, i) => `translate(${width},${i * 20})`);
 
-        legend_g.append("circle")
-            .attr("cx", 0)
-            .attr("cy", 0)
-            .attr("r", 5)
-            .attr("fill", colorScale);
+        // legend_g.append("circle")
+        //     .attr("cx", 0)
+        //     .attr("cy", 0)
+        //     .attr("r", 5)
+        //     .attr("fill", colorScale);
 
-        legend_g.append("text")
-            .attr("x", 10)
-            .attr("y", 5)
-            .text(d => d);
+        // legend_g.append("text")
+        //     .attr("x", 10)
+        //     .attr("y", 5)
+        //     .text(d => d);
 
         //drawing the second legend
         // const legend_g2 = svg.append("g")
@@ -313,22 +277,10 @@ export default function NetworkGraph(props) {
         }
     }
     return (
-        <Fragment>
-            <CssBaseline />
-            <HideOnScroll {...props}>
-                <AppBar color="primary" enableColorOnDark>
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ mr: 'auto' }}>
-                            Network Graph
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-            </HideOnScroll>
-            <Toolbar />
-            <Box sx={{ flexGrow: 1, m: 4 }}>
-                <svg id="svg-id">
-                </svg>
-            </Box>
-        </Fragment>
+        <Box sx={{ flexGrow: 1 }}
+        >
+            <svg id="svg-id">
+            </svg>
+        </Box>
     );
 }
