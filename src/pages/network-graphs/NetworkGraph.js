@@ -42,15 +42,15 @@ export default function NetworkGraph(props) {
 
         svg.append('defs').append('marker')
             .attr("id", 'arrowhead')
-            .attr('viewBox', '-0 -5 10 10') //the bound of the SVG viewport for the current SVG fragment. defines a coordinate system 10 wide and 10 high starting on (0,-5)
-            .attr('refX', 23) // x coordinate for the reference point of the marker. If circle is bigger, this need to be bigger.
-            .attr('refY', 0)
+            .attr('viewBox', '-0 -0 12 12') //the bound of the SVG viewport for the current SVG fragment. defines a coordinate system 10 wide and 10 high starting on (0,-5)
+            .attr('refX', 25) // x coordinate for the reference point of the marker. If circle is bigger, this need to be bigger.
+            .attr('refY', 6)
             .attr('orient', 'auto')
-            .attr('markerWidth', 13)
-            .attr('markerHeight', 13)
+            .attr('markerWidth', 20)
+            .attr('markerHeight', 30)
             .attr('xoverflow', 'visible')
             .append('svg:path')
-            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+            .attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2')
             .attr('fill', '#999')
             .style('stroke', 'none');
 
@@ -158,15 +158,15 @@ export default function NetworkGraph(props) {
             );
 
         node.append("circle")
-            .attr("r", d => 17)//+ d.runtime/20 )
+            .attr("r", d => 24)//+ d.runtime/20 )
             .style("stroke", "grey")
-            .style("stroke-opacity", 0.3)
-            .style("stroke-width", d => d.runtime / 10)
+            // .style("stroke-opacity", 0.3)
+            // .style("stroke-width", d => d.runtime / 10)
             .style("fill", d => colorScale(d.group))
 
         // node.append("title")
         //     .text(d => d.id + ": " + d.label + " - " + d.group + ", runtime:" + d.runtime + "min");
-        
+
         node.on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave);
@@ -174,10 +174,12 @@ export default function NetworkGraph(props) {
         node.append("text")
             .attr("dy", 4)
             .attr("dx", -15)
+            .style("font-size", "12px")
             .text(d => d.name);
         node.append("text")
             .attr("dy", 12)
             .attr("dx", -8)
+            .style("font-size", "8px")
             .text(d => d.runtime);
 
         //Listen for tick events to render the nodes as they update in your Canvas or SVG.
