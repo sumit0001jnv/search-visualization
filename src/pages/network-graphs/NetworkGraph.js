@@ -164,8 +164,12 @@ export default function NetworkGraph(props) {
             .style("stroke-width", d => d.runtime / 10)
             .style("fill", d => colorScale(d.group))
 
-        node.append("title")
-            .text(d => d.id + ": " + d.label + " - " + d.group + ", runtime:" + d.runtime + "min");
+        // node.append("title")
+        //     .text(d => d.id + ": " + d.label + " - " + d.group + ", runtime:" + d.runtime + "min");
+        
+        node.on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave);
 
         node.append("text")
             .attr("dy", 4)
@@ -275,9 +279,48 @@ export default function NetworkGraph(props) {
         function zoom_actions() {
             svg.attr("transform", d3.zoomTransform(this))
         }
+
+        const Tooltip = d3.select("body")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("position", "absolute")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+
+        function mouseover(d) {
+            Tooltip
+                .style("opacity", 1)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+        }
+        function mousemove(event, d) {
+            //d3.pointer(event,this.state.svg.node());
+            Tooltip
+                .html(`<div style="display:flex;flex-direction:column;font-size:12px;color: ${colorScale(d.group)}">
+                <div>Name: ${d.name}</div>
+                <div>Label: ${d.label}</div>
+                <div>Runtime: ${d.runtime}</div>
+                </div>`)
+                .style("left", (event.pageX + 30) + "px")
+                .style("top", (event.pageY) + "px")
+                .style("border", "1px solid " + colorScale(d.group))
+                .style("border-top", "4px solid " + colorScale(d.group))
+        }
+        function mouseleave(d) {
+            Tooltip
+                .style("opacity", 0)
+            d3.select(this)
+                .style("stroke", "none")
+                .style("opacity", 0.8)
+        }
     }
     return (
-        <Box sx={{ flexGrow: 1 }}
+        <Box id='svg-container' sx={{ flexGrow: 1 }}
         >
             <svg id="svg-id">
             </svg>
