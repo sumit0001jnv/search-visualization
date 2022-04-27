@@ -43,7 +43,7 @@ export default function NetworkGraph(props) {
         svg.append('defs').append('marker')
             .attr("id", 'arrowhead')
             .attr('viewBox', '-0 -0 12 12') //the bound of the SVG viewport for the current SVG fragment. defines a coordinate system 10 wide and 10 high starting on (0,-5)
-            .attr('refX', 28) // x coordinate for the reference point of the marker. If circle is bigger, this need to be bigger.
+            .attr('refX', 25) // x coordinate for the reference point of the marker. If circle is bigger, this need to be bigger.
             .attr('refY', 6)
             .attr('orient', 'auto')
             .attr('markerWidth', 20)
@@ -157,12 +157,50 @@ export default function NetworkGraph(props) {
                 //.on("end", dragended)     //end - after an active pointer becomes inactive (on mouseup, touchend or touchcancel).
             );
 
-        node.append("circle")
-            .attr("r", d => 30)//+ d.runtime/20 )
+        // node.append("circle")
+        //     .attr("r", d => 30)//+ d.runtime/20 )
+        //     .style("stroke", "grey")
+        //     // .style("stroke-opacity", 0.3)
+        //     // .style("stroke-width", d => d.runtime / 10)
+        //     .style("fill", d => colorScale(d.group))
+        /***
+         * 
+         * 
+         * 
+         */
+
+        var customSymbolHexagon = {
+            draw: function (context, size) {
+                let s = Math.sqrt(size) / 2;
+                // M 0 0 L 1 0 L 2 1 L 1 2 L 0 2 L -1 1 L 0 0
+                // context.moveTo(s, s);
+                // context.lineTo(s, -s);
+                // context.lineTo(s, -s);
+                // context.lineTo(-s, -s);
+                // context.lineTo(-s, -s);
+                // context.lineTo(-s, s);
+
+                context.moveTo(s, 0);
+                context.lineTo(s / 2, (Math.sqrt(3) * s) / 2);
+                context.lineTo(-s / 2, (Math.sqrt(3) * s) / 2);
+                context.lineTo(-s, 0);
+                context.lineTo(-s / 2, -(Math.sqrt(3) * s) / 2);
+                context.lineTo(s / 2, -(Math.sqrt(3) * s) / 2);
+                context.lineTo(s, 0);
+
+
+                context.closePath();
+            }
+        }
+
+        const customHex = d3.symbol().type(customSymbolHexagon).size(3000);
+        node.append("path")
+            .attr("d", customHex)
             .style("stroke", "grey")
-            // .style("stroke-opacity", 0.3)
-            // .style("stroke-width", d => d.runtime / 10)
             .style("fill", d => colorScale(d.group))
+            .attr("transform", "translate(0,0)")
+
+        /**** */
 
         // node.append("title")
         //     .text(d => d.id + ": " + d.label + " - " + d.group + ", runtime:" + d.runtime + "min");
@@ -177,9 +215,9 @@ export default function NetworkGraph(props) {
             .style("font-size", "12px")
             .text(d => d.name);
         node.append("text")
-            .attr("dy", 12)
+            .attr("dy", 14)
             .attr("dx", -8)
-            .style("font-size", "8px")
+            .style("font-size", "10px")
             .text(d => d.runtime);
 
         //Listen for tick events to render the nodes as they update in your Canvas or SVG.
@@ -303,7 +341,7 @@ export default function NetworkGraph(props) {
         function mousemove(event, d) {
             //d3.pointer(event,this.state.svg.node());
             Tooltip
-                .html(`<div style="display:flex;flex-direction:column;font-size:12px;color: #9e9e9e";font-weight:400>
+                .html(`<div style="display:flex;flex-direction:column;font-size:12px;color: #9e9e9e;font-weight:400">
                 <div>Name: ${d.name}</div>
                 <div>Label: ${d.label}</div>
                 <div>Runtime: ${d.runtime}</div>
