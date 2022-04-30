@@ -54,6 +54,28 @@ export default function NetworkGraph(props) {
             .attr('fill', '#999')
             .style('stroke', 'none');
 
+
+        ///gradeint
+        // var gradient = svg.append("svg:defs")
+        //     .append("svg:linearGradient")
+        //     .attr("id", "gradient")
+        //     .attr("x1", "0%")
+        //     .attr("y1", "0%")
+        //     .attr("x2", "100%")
+        //     .attr("y2", "100%")
+        //     .attr("spreadMethod", "pad");
+
+        // // Define the gradient colors
+        // gradient.append("svg:stop")
+        //     .attr("offset", "0%")
+        //     .attr("stop-color",d=> "#a00000")
+        //     .attr("stop-opacity", 1);
+
+        // gradient.append("svg:stop")
+        //     .attr("offset", "100%")
+        //     .attr("stop-color", "#aaaa00")
+        //     .attr("stop-opacity", 1);
+
         const dataset = {
             nodes: [
                 { id: 1, name: 'AGGR', label: 'Aggregation', group: 'Team C', runtime: 20 },
@@ -114,11 +136,6 @@ export default function NetworkGraph(props) {
             .attr('marker-end', 'url(#arrowhead)') //The marker-end attribute defines the arrowhead or polymarker that will be drawn at the final vertex of the given shape.
 
 
-        //The <title> element provides an accessible, short-text description of any SVG container element or graphics element.
-        //Text in a <title> element is not rendered as part of the graphic, but browsers usually display it as a tooltip.
-        link.append("title")
-            .text(d => d.type);
-
         const edgepaths = svg.selectAll(".edgepath") //make path go along with the link provide position for link labels
             .data(dataset.links)
             .enter()
@@ -154,7 +171,7 @@ export default function NetworkGraph(props) {
             .call(d3.drag() //sets the event listener for the specified typenames and returns the drag behavior.
                 .on("start", dragstarted) //start - after a new pointer becomes active (on mousedown or touchstart).
                 .on("drag", dragged)      //drag - after an active pointer moves (on mousemove or touchmove).
-                //.on("end", dragended)     //end - after an active pointer becomes inactive (on mouseup, touchend or touchcancel).
+                .on("end", dragended)     //end - after an active pointer becomes inactive (on mouseup, touchend or touchcancel).
             );
 
         // node.append("circle")
@@ -196,9 +213,11 @@ export default function NetworkGraph(props) {
         const customHex = d3.symbol().type(customSymbolHexagon).size(3000);
         node.append("path")
             .attr("d", customHex)
-            .style("stroke", "grey")
+            // .style("stroke", "grey")
+            .style("filter", "drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4))")
             .style("fill", d => colorScale(d.group))
-            .attr("transform", "translate(0,0)")
+        // .style("fill", "#ccc")
+        // .attr("transform", "translate(0,0)")
 
         /**** */
 
@@ -221,12 +240,15 @@ export default function NetworkGraph(props) {
             .text(d => d.runtime);
 
         //Listen for tick events to render the nodes as they update in your Canvas or SVG.
+
         simulation
             .nodes(dataset.nodes)
             .on("tick", ticked);
 
         simulation.force("link")
             .links(dataset.links);
+
+
 
 
         // This function is run at each iteration of the force algorithm, updating the nodes position (the nodes data array is directly manipulated).
@@ -245,6 +267,7 @@ export default function NetworkGraph(props) {
         //The simulation is temporarily “heated” during interaction by setting the target alpha to a non-zero value.
         function dragstarted(event, d) {
             if (!event.active) simulation.alphaTarget(0.3).restart();//sets the current target alpha to the specified number in the range [0,1].
+            simulation.force("link", null).force("charge", null).force("center", null);
             d.fy = d.y; //fx - the node’s fixed x-position. Original is null.
             d.fx = d.x; //fy - the node’s fixed y-position. Original is null.
         }
@@ -256,13 +279,13 @@ export default function NetworkGraph(props) {
         }
 
         //the targeted node is released when the gesture ends
-        //   function dragended(d) {
-        //     if (!d3.event.active) simulation.alphaTarget(0);
-        //     d.fx = null;
-        //     d.fy = null;
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
 
-        //     console.log("dataset after dragged is ...",dataset);
-        //   }
+            console.log("dataset after dragged is ...", dataset);
+        }
 
         //drawing the legend
         // const legend_g = svg.selectAll(".legend")
@@ -336,7 +359,7 @@ export default function NetworkGraph(props) {
                 .style("opacity", 1)
             d3.select(this)
                 .style("stroke", "black")
-                .style("opacity", 1)
+            // .style("opacity", 1)
         }
         function mousemove(event, d) {
             //d3.pointer(event,this.state.svg.node());
@@ -356,7 +379,7 @@ export default function NetworkGraph(props) {
                 .style("opacity", 0)
             d3.select(this)
                 .style("stroke", "none")
-                .style("opacity", 0.8)
+            // .style("opacity", 0.8)
         }
     }
     return (

@@ -63,45 +63,43 @@ export default function SearchLayout(props) {
             </HideOnScroll>
             <Toolbar />
             <Box sx={{ flexGrow: 1, m: 2 }}>
-                <Grid container direction={'row'} alignItems={'center'}>
-                    <Grid item xs={12} md={4} sx={{ textAlign: 'end', height: 'calc(100vh - 100px)' }}>
-                        <Item sx={{
-                            width: 'calc(100% - 10px)',
-                            height: '100%',
-                            overflow: 'auto',
-                            mr: 1,
-                            px: 2
-                        }}>
-                            <Typography component="h1" variant="h5" sx={{ textAlign: 'initial', mr: 'auto',p:2 }}>
+                <Item sx={{
+                    width: '100%',
+                    height: '100%',
+                    overflow: 'auto'
+                }}>
+                    <Grid container direction={'row'} alignItems={'center'}>
+                        <Grid item direction={'row'} sx={{ p: 2 }} xs={12}>
+                            <Typography xs={4} component="div" variant="h5" sx={{ textAlign: 'initial', mr: 'auto' }}>
                                 Search
                             </Typography>
                             <TextField
                                 margin="normal"
                                 disabled
                                 required
-                                fullWidth
+                                xs={12}
+                                sx={{ width: '100%' }}
                                 id="name"
                                 label={'Search'}
                                 name="name"
                                 type="text"
                                 autoFocus
                                 size={'small'}
-                                sx={{}}
                             />
-                        </Item>
+                        </Grid>
 
+                        <Grid item xs={12} alignItems={'center'} sx={{ height: 'calc(100vh - 100px)' }}>
+                            <Item sx={{
+                                width: '100%',
+                                height: '100%',
+                                overflow: 'auto'
+                            }}>
+                                <NetworkGraph></NetworkGraph>
+                            </Item>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} md={8} alignItems={'center'} sx={{ height: 'calc(100vh - 100px)' }}>
-                        <Item sx={{
-                            width: '100%',
-                            height: '100%',
-                            overflow: 'auto'
-                        }}>
-                            <NetworkGraph></NetworkGraph>
-                        </Item>
-                    </Grid>
-                </Grid>
+                </Item>
             </Box>
-        </Fragment>
+        </Fragment >
     );
 }
