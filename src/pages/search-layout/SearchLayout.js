@@ -51,20 +51,20 @@ HideOnScroll.propTypes = {
 export default function SearchLayout(props) {
     const allData = {
         nodes: [
-            { id: 1, name: 'AGGR', label: 'Aggregation', group: 'Team C', runtime: 20 },
-            { id: 2, name: 'ASMT', label: 'Assessment Repository', group: 'Team A', runtime: 60 },
-            { id: 3, name: 'CALC', label: 'Final Calc', group: 'Team C', runtime: 30 },
-            { id: 4, name: 'DEMO', label: 'Demographic', group: 'Team B', runtime: 40 },
-            { id: 5, name: 'ELIG', label: 'Eligibility', group: 'Team B', runtime: 20 },
-            { id: 6, name: 'GOAL', label: 'Goal Setting', group: 'Team C', runtime: 60 },
-            { id: 7, name: 'GROW', label: 'Growth Model', group: 'Team C', runtime: 60 },
+            { id: 1, name: 'AGGR', label: 'Final Calc/Aggregation', group: 'Team C', runtime: 20 },
+            { id: 2, name: 'ASMT', label: 'State Data/Assessment Repository', group: 'Team A', runtime: 60 },
+            { id: 3, name: 'CALC', label: 'Reporting/Final Calc', group: 'Team C', runtime: 30 },
+            { id: 4, name: 'DEMO', label: 'Snapshot/Demographic', group: 'Team B', runtime: 40 },
+            { id: 5, name: 'ELIG', label: 'State Data/Eligibility', group: 'Team B', runtime: 20 },
+            { id: 6, name: 'GOAL', label: 'MOSL/Goal Setting', group: 'Team C', runtime: 60 },
+            { id: 7, name: 'GROW', label: 'MOSL/Growth Model', group: 'Team C', runtime: 60 },
             { id: 8, name: 'LINK', label: 'Snapshot/Linkage', group: 'Team A', runtime: 100 },
-            { id: 9, name: 'MOSL', label: 'MOSL', group: 'Team A', runtime: 80 },
-            { id: 10, name: 'MOTP', label: 'MOTP', group: 'Team A', runtime: 20 },
+            { id: 9, name: 'MOSL', label: 'Reporting/MOSL', group: 'Team A', runtime: 80 },
+            { id: 10, name: 'MOTP', label: 'Final Calc/MOTP', group: 'Team A', runtime: 20 },
             { id: 11, name: 'REPT', label: 'Reporting', group: 'Team E', runtime: 240 },
-            { id: 12, name: 'SEDD', label: 'State Data', group: 'Team A', runtime: 30 },
-            { id: 13, name: 'SNAP', label: 'Snapshot', group: 'Team A', runtime: 40 },
-            { id: 14, name: 'PTRN', label: 'Snapshot', group: 'Team D', runtime: 40 }
+            { id: 12, name: 'SEDD', label: 'Reporting/State Data', group: 'Team A', runtime: 30 },
+            { id: 13, name: 'SNAP', label: 'Reporting/Snapshot', group: 'Team A', runtime: 40 },
+            { id: 14, name: 'PTRN', label: 'State Data/pattern', group: 'Team D', runtime: 40 }
         ],
         links: [
             { source: 3, target: 1, type: 'Next -->>' },
