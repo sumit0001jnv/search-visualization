@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import NetworkGraph from '../network-graphs/NetworkGraph';
 import * as d3 from 'd3';
+import { bgcolor } from '@mui/system';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -52,19 +53,19 @@ export default function SearchLayout(props) {
     const allData = {
         nodes: [
             { id: 1, name: 'AGGR', label: 'Final Calc/Aggregation', group: 'Team C', runtime: 20 },
-            { id: 2, name: 'ASMT', label: 'State Data/Assessment Repository', group: 'Team A', runtime: 60 },
+            { id: 2, name: 'ASMT', label: 'State Data/Assessment Repository', group: 'Team B', runtime: 60 },
             { id: 3, name: 'CALC', label: 'Reporting/Final Calc', group: 'Team C', runtime: 30 },
-            { id: 4, name: 'DEMO', label: 'Snapshot/Demographic', group: 'Team B', runtime: 40 },
+            { id: 4, name: 'DEMOFDDGGGD', label: 'Snapshot/Demographic', group: 'Team A', runtime: 40 },
             { id: 5, name: 'ELIG', label: 'State Data/Eligibility', group: 'Team B', runtime: 20 },
-            { id: 6, name: 'GOAL', label: 'MOSL/Goal Setting', group: 'Team C', runtime: 60 },
-            { id: 7, name: 'GROW', label: 'MOSL/Growth Model', group: 'Team C', runtime: 60 },
-            { id: 8, name: 'LINK', label: 'Snapshot/Linkage', group: 'Team A', runtime: 100 },
-            { id: 9, name: 'MOSL', label: 'Reporting/MOSL', group: 'Team A', runtime: 80 },
-            { id: 10, name: 'MOTP', label: 'Final Calc/MOTP', group: 'Team A', runtime: 20 },
-            { id: 11, name: 'REPT', label: 'Reporting', group: 'Team E', runtime: 240 },
-            { id: 12, name: 'SEDD', label: 'Reporting/State Data', group: 'Team A', runtime: 30 },
+            { id: 6, name: 'GOAL', label: 'MOSL/Goal Setting', group: 'Team D', runtime: 60 },
+            { id: 7, name: 'GROW', label: 'MOSL/Growth Model', group: 'Team D', runtime: 60 },
+            { id: 8, name: 'LINK DFSSD', label: 'Snapshot/Linkage', group: 'Team A', runtime: 100 },
+            { id: 9, name: 'MOSL', label: 'Reporting/MOSL', group: 'Team D', runtime: 80 },
+            { id: 10, name: 'MOTP', label: 'Final Calc/MOTP', group: 'Team C', runtime: 20 },
+            { id: 11, name: 'REPTFFF', label: 'Reportingsgfs', group: 'Team E', runtime: 240 },
+            { id: 12, name: 'SEDD', label: 'Reporting/State Data', group: 'Team B', runtime: 30 },
             { id: 13, name: 'SNAP', label: 'Reporting/Snapshot', group: 'Team A', runtime: 40 },
-            { id: 14, name: 'PTRN', label: 'State Data/pattern', group: 'Team D', runtime: 40 }
+            { id: 14, name: 'PTRN', label: 'State Data/pattern', group: 'Team B', runtime: 40 }
         ],
         links: [
             { source: 3, target: 1, type: 'Next -->>' },
@@ -100,57 +101,7 @@ export default function SearchLayout(props) {
             // { source: 4, target: 2, type: 'Next -->>' }
         ]
     }
-    const [dataset, setDataset] = useState({
-        nodes: [
-            { id: 1, name: 'AGGR', label: 'Aggregation', group: 'Team C', runtime: 20 },
-            { id: 2, name: 'ASMT', label: 'Assessment Repository', group: 'Team A', runtime: 60 },
-            { id: 3, name: 'CALC', label: 'Final Calc', group: 'Team C', runtime: 30 },
-            { id: 4, name: 'DEMO', label: 'Demographic', group: 'Team B', runtime: 40 },
-            { id: 5, name: 'ELIG', label: 'Eligibility', group: 'Team B', runtime: 20 },
-            { id: 6, name: 'GOAL', label: 'Goal Setting', group: 'Team C', runtime: 60 },
-            { id: 7, name: 'GROW', label: 'Growth Model', group: 'Team C', runtime: 60 },
-            { id: 8, name: 'LINK', label: 'Linkage', group: 'Team A', runtime: 100 },
-            { id: 9, name: 'MOSL', label: 'MOSL', group: 'Team A', runtime: 80 },
-            { id: 10, name: 'MOTP', label: 'MOTP', group: 'Team A', runtime: 20 },
-            { id: 11, name: 'REPT', label: 'Reporting', group: 'Team E', runtime: 240 },
-            { id: 12, name: 'SEDD', label: 'State Data', group: 'Team A', runtime: 30 },
-            { id: 13, name: 'SNAP', label: 'Snapshot', group: 'Team A', runtime: 40 },
-            { id: 14, name: 'PTRN', label: 'Snapshot', group: 'Team D', runtime: 40 }
-        ],
-        links: [
-            { source: 3, target: 1, type: 'Next -->>' },
-            // { source: 6, target: 1, type: 'Next -->>' },
-            // { source: 1, target: 7, type: 'Next -->>' },
-            // { source: 9, target: 1, type: 'Next -->>' },
-            { source: 13, target: 8, type: 'Next -->>' },
-            // { source: 2, target: 6, type: 'Next -->>' },
-            // { source: 2, target: 7, type: 'Next -->>' },
-            // { source: 2, target: 8, type: 'Next -->>' },
-            // { source: 2, target: 9, type: 'Next -->>' },
-            { source: 3, target: 10, type: 'Next -->>' },
-            { source: 11, target: 3, type: 'Next -->>' },
-            // { source: 8, target: 5, type: 'Go to ->>' },
-            // { source: 8, target: 11, type: 'Go to ->>' },
-            { source: 9, target: 6, type: 'Go to ->>' },
-            { source: 9, target: 7, type: 'Go to ->>' },
-            // { source: 8, target: 9, type: 'Go to ->>' },
-            { source: 11, target: 9, type: 'Go to ->>' },
-            { source: 11, target: 12, type: 'Go to ->>' },
-            { source: 12, target: 5, type: 'Go to ->>' },
-            { source: 12, target: 14, type: 'Go to ->>' },
-            { source: 12, target: 2, type: 'Go to ->>' },
-            // { source: 12, target: 9, type: 'Go to ->>' },
-            { source: 11, target: 13, type: 'Go to ->>' },
-            // { source: 2, target: 13, type: 'Go to ->>' },
-            { source: 13, target: 4, type: 'This way>>' },
-            // { source: 13, target: 5, type: 'This way>>' },
-            // { source: 13, target: 8, type: 'This way>>' },
-            // { source: 13, target: 9, type: 'This way>>' },
-            // { source: 13, target: 10, type: 'This way>>' },
-            // { source: 4, target: 7, type: 'Next -->>' },
-            // { source: 4, target: 2, type: 'Next -->>' }
-        ]
-    });
+    const [dataset, setDataset] = useState(allData);
     // searchTree()
     const searchTree = (event) => {
         console.log(event.target.value);
@@ -190,14 +141,14 @@ export default function SearchLayout(props) {
                 }}>
                     <Grid container direction={'row'} alignItems={'center'}>
                         <Grid item direction={'row'} sx={{ p: 2 }} xs={12}>
-                            <Typography xs={4} component="div" variant="h5" sx={{ textAlign: 'initial', mr: 'auto' }}>
+                            {/* <Typography xs={4} component="div" variant="h5" sx={{ textAlign: 'initial', mr: 'auto' }}>
                                 Search
-                            </Typography>
+                            </Typography> */}
                             <TextField
                                 margin="normal"
                                 required
                                 xs={12}
-                                sx={{ width: '100%' }}
+                                sx={{ width: '100%', bgcolor: "#fff" }}
                                 id="name"
                                 label={'Search'}
                                 name="name"

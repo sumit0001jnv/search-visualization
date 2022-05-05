@@ -23,8 +23,8 @@ export default function NetworkGraph(props) {
 
 
     useEffect(() => {
-        const width = document.querySelector("#svg-id").parentNode.offsetWidth - (margin.left + margin.right);
-        const height = document.querySelector("#svg-id").parentNode.offsetHeight - (margin.top + margin.bottom);
+        const width = document.querySelector("#svg-id").parentElement.parentElement.offsetWidth - 24 - (margin.left + margin.right);
+        const height = document.querySelector("#svg-id").parentElement.parentElement.offsetHeight - 24 - (margin.top + margin.bottom);
         console.log(width, height)
         setWidth(() => width);
         setHeight(() => height);
@@ -36,7 +36,9 @@ export default function NetworkGraph(props) {
 
     useEffect(() => {
         setDataset(() => (props.dataset || {}));
-        onInitSvg();
+        setTimeout(() => {
+            onInitSvg();
+        }, 1000);
     }, [props.dataset])
 
     function onInitSvg() {
@@ -120,6 +122,19 @@ export default function NetworkGraph(props) {
             .attr("startOffset", "50%")
             .text(d => d.type);
 
+
+        link.attr("d", function (d) {
+            return arcPath(false, d);
+        });
+
+        edgepaths.attr("d", function (d) {
+            return arcPath(d.source.x < d.target.x, d);
+        });
+
+        edgelabels.attr("d", function (d) {
+            return arcPath(d.source.x < d.target.x, d);
+        });
+
         const node = svg.selectAll(".nodes")
             .data(dataset.nodes)
             .enter()
@@ -187,13 +202,15 @@ export default function NetworkGraph(props) {
 
         node.append("text")
             .attr("dy", 4)
-            .attr("dx", -15)
+            // .attr("dx", -15)
             .style("font-size", "12px")
+            .style("text-anchor", "middle")
             .text(d => d.name);
         node.append("text")
             .attr("dy", 14)
-            .attr("dx", -8)
+            // .attr("dx", -8)
             .style("font-size", "10px")
+            .style("text-anchor", "middle")
             .text(d => d.runtime);
 
         //Listen for tick events to render the nodes as they update in your Canvas or SVG.
@@ -214,6 +231,12 @@ export default function NetworkGraph(props) {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
+
+            link.attr("d", function (d) {
+                return arcPath(d.source.x < d.target.x, d);
+            });
+
+
 
             node.attr("transform", d => `translate(${d.x},${d.y})`);
 
@@ -302,7 +325,7 @@ export default function NetworkGraph(props) {
 
         const Tooltip = d3.select("body")
             .append("div")
-            .style("opacity", 0)
+            .style("display", 'none')
             .attr("class", "tooltip")
             .style("position", "absolute")
             .style("background-color", "white")
@@ -311,9 +334,22 @@ export default function NetworkGraph(props) {
             .style("border-radius", "5px")
             .style("padding", "5px")
 
+        function arcPath(leftHand, d) {
+            console.log("leftHand", leftHand);
+            var start = leftHand ? d.source : d.target,
+                end = leftHand ? d.target : d.source,
+                dx = end.x - start.x,
+                dy = end.y - start.y,
+                dr = Math.sqrt(dx * dx + dy * dy),
+                sweep = leftHand ? 0 : 1;
+            return "M" + start.x + "," + start.y + "A" + dr + "," + dr +
+                " 0 0," + sweep + " " + end.x + "," + end.y;
+        }
+
         function mouseover(d) {
             Tooltip
-                .style("opacity", 1)
+                // .style("opacity", 1)
+                .style("display", 'block')
             d3.select(this)
                 .style("stroke", "black")
             // .style("opacity", 1)
@@ -333,7 +369,7 @@ export default function NetworkGraph(props) {
         }
         function mouseleave(d) {
             Tooltip
-                .style("opacity", 0)
+                .style("display", 'none')
             d3.select(this)
                 .style("stroke", "none")
             // .style("opacity", 0.8)
@@ -342,7 +378,7 @@ export default function NetworkGraph(props) {
     return (
         <Box id='svg-container' sx={{ flexGrow: 1 }}
         >
-            <svg id="svg-id">
+            <svg id="svg-id" style={{ boxShadow: "0px 0px 8px 4px #e3f2fd inset" }}>
             </svg>
         </Box>
     );
