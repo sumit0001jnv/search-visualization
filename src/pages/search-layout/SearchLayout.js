@@ -12,8 +12,6 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import NetworkGraph from '../network-graphs/NetworkGraph';
-import * as d3 from 'd3';
-import { bgcolor } from '@mui/system';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,

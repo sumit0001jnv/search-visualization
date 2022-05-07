@@ -49,6 +49,10 @@ export default function NetworkGraph(props) {
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
+
+
+        let rectgroups = svg.append("g");
+
         svg.append('defs').append('marker')
             .attr("id", 'arrowhead')
             .attr('viewBox', '-0 -0 12 12') //the bound of the SVG viewport for the current SVG fragment. defines a coordinate system 10 wide and 10 high starting on (0,-5)
@@ -214,6 +218,52 @@ export default function NetworkGraph(props) {
             .text(d => d.runtime);
 
         //Listen for tick events to render the nodes as they update in your Canvas or SVG.
+        function updateGroup() {
+            console.log("ticked called")
+            rectgroups.selectAll("*").remove();
+            let uniqueGroupes = [];
+            dataset.nodes.forEach(n => {
+                if (!uniqueGroupes.includes(n.group)) {
+                    uniqueGroupes.push(n.group);
+                }
+            })
+            uniqueGroupes.forEach(group => {
+                const filterednode = svg.selectAll(".nodes").filter(d => d.group === group);
+                var lowestX = Number.POSITIVE_INFINITY;
+                var highestX = Number.NEGATIVE_INFINITY;
+                var lowestY = Number.POSITIVE_INFINITY;
+                var highestY = Number.NEGATIVE_INFINITY;
+                var tmpX, tmpY;
+                let arr = filterednode.data();
+                for (var i = arr.length - 1; i >= 0; i--) {
+                    tmpX = arr[i].x;
+                    if (tmpX < lowestX) lowestX = tmpX;
+                    if (tmpX > highestX) highestX = tmpX;
+
+
+                    tmpY = arr[i].y;
+
+                    if (tmpY < lowestY) lowestY = tmpY;
+                    if (tmpY > highestY) highestY = tmpY;
+                }
+                console.log(highestX, lowestX, lowestY, highestY);
+                rectgroups.append("rect")
+                    .attr('x', () => {
+                        return lowestX - 80
+                    })
+                    .attr('y', lowestY - 80)
+                    .attr('width', highestX - lowestX + 180)
+                    .attr('height', highestY - lowestY + 180)
+                    .attr('stroke', colorScale(group))
+                    .attr('fill', colorScale(group))
+                    .attr('stroke-width', 6)
+                    .attr('fill-opacity', 0.2);
+            });
+
+
+        }
+
+
 
         simulation
             .nodes(dataset.nodes)
@@ -241,6 +291,7 @@ export default function NetworkGraph(props) {
             node.attr("transform", d => `translate(${d.x},${d.y})`);
 
             edgepaths.attr('d', d => 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y);
+            updateGroup();
         }
 
         //When the drag gesture starts, the targeted node is fixed to the pointer
@@ -263,8 +314,7 @@ export default function NetworkGraph(props) {
             if (!event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
-
-            console.log("dataset after dragged is ...", dataset);
+            updateGroup();
         }
 
         //drawing the legend
@@ -335,7 +385,6 @@ export default function NetworkGraph(props) {
             .style("padding", "5px")
 
         function arcPath(leftHand, d) {
-            console.log("leftHand", leftHand);
             var start = leftHand ? d.source : d.target,
                 end = leftHand ? d.target : d.source,
                 dx = end.x - start.x,
